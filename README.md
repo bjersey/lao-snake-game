@@ -2,6 +2,10 @@
 
 Brian Lao's snake homework assignment -- enjoy!
 
+## Access
+
+Game is hosted here: https://s3.amazonaws.com/lao-squarespace-snake-hw/www/dist/main.html
+
 ## Build instructions
 
 Tested with node version `8.9.0` and npm version `5.5.1`.
