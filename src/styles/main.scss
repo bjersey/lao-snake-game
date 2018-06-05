@@ -5,6 +5,7 @@ $game-size: 15;
 
 body {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 
@@ -19,14 +20,20 @@ body {
       .game__square {
         width: $game-square-width;
         height: $game-square-height;
-        border: 1px solid green;
+        background: #ccb772;
 
-        &.apple {
-          background: green;
+        &.apple::before {
+          content: '';
+          position: absolute;
+          height: 15px;
+          width: 15px;
+          background: red;
+          border-radius: 50%;
         }
 
         &.occupied {
-          background: red;
+          background: green;
+          border-radius: 10%;
         }
       }
     }
