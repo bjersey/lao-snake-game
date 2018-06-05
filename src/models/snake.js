@@ -5,7 +5,7 @@ export class Snake {
 
 	constructor(...initialLocation) {
 		this._occupiedSpaces = initialLocation;  // snake location and movement is modeled after a queue
-		this._occupiedSpacesSet = new Set(initialLocation);
+		this._occupiedSpacesSet = new Set(initialLocation);  // for quickly finding squares occupied by snake
 		this._currentDirection = DIRECTION.RIGHT;
 		this._lastTail = undefined;  // used to extend snake when apple is eaten
 		this._paintSquares();
@@ -50,7 +50,7 @@ export class Snake {
 		squareElement.classList.remove('occupied');
 	}
 
-	extendTail() {
+	extendTail() {  // when an apple is eaten
 		this._occupiedSpacesSet.add(this._lastTail);
 		this._occupiedSpaces.unshift(this._lastTail);
 	}
@@ -60,30 +60,28 @@ export class Snake {
 		switch (this._currentDirection) {
 		case DIRECTION.RIGHT:
 			newHead = new Square(this.head.x + 1, this.head.y);
-			this._occupiedSpacesSet.add(newHead);
 			this._occupiedSpaces.push(newHead);
+			this._occupiedSpacesSet.add(newHead);
 			break;
 		case DIRECTION.LEFT:
 			newHead = new Square(this.head.x - 1, this.head.y);
-			this._occupiedSpacesSet.add(newHead);
 			this._occupiedSpaces.push(newHead);
+			this._occupiedSpacesSet.add(newHead);
 			break;
 		case DIRECTION.UP:
 			newHead = new Square(this.head.x, this.head.y + 1);
-			this._occupiedSpacesSet.add(newHead);
 			this._occupiedSpaces.push(newHead);
+			this._occupiedSpacesSet.add(newHead);
 			break;
 		case DIRECTION.DOWN:
 			newHead = new Square(this.head.x, this.head.y - 1);
-			this._occupiedSpacesSet.add(newHead);
 			this._occupiedSpaces.push(newHead);
+			this._occupiedSpacesSet.add(newHead);
 			break;
 		}
-		this._lastTail = this._occupiedSpaces.splice(0, 1)[0];
+		this._lastTail = this._occupiedSpaces.shift();
 		this._occupiedSpacesSet.delete(this._lastTail);
 		this._unpaintSquares(this._lastTail);
 		this._paintSquares([newHead]);
 	}
-
-  
 }

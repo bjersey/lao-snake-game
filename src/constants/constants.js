@@ -8,7 +8,7 @@ export const DIRECTION = {
 	RIGHT: 'right',
 };
 
-export const GAME_SPEED = 300; // 0.5 second per frame
+export const GAME_SPEED = 300; // 0.3 second per frame
 
 export const KEY_DOWN_MAP = {
 	SPACE: 32,
