@@ -11,7 +11,6 @@ class Game {
 
 	constructor() {
 		this.timer = new Timer(GAME_SPEED);
-    
 	}
 
 	createGame() {
@@ -29,27 +28,35 @@ class Game {
 
 	setApple() {
 		if (this.apple) {
-			const squareElement = document.querySelector(`div.game__column--${this.apple.x} div.game__square--${this.apple.y}`);
-			squareElement.classList.remove('apple');  
+			this._deleteApple(this.apple);
 		}
 
 		const square = this._getEmptySquare();
 
-		const squareElement = document.querySelector(`div.game__column--${square.x} div.game__square--${square.y}`);
-		squareElement.classList.add('apple');
+		this._addApple(square);
 
 		return square;
+	}
 
+	_deleteApple(apple) {
+		const squareElement = document.querySelector(`div.game__column--${apple.x} div.game__square--${apple.y}`);
+		squareElement.classList.remove('apple');  
+	}
+
+	_addApple(square) {
+		const squareElement = document.querySelector(`div.game__column--${square.x} div.game__square--${square.y}`);
+		squareElement.classList.add('apple');
 	}
 
 	_progressFrame() {
 		this.snake.move();
-		// progress snake
+		
 		if (this.snake.head.x === this.apple.x && this.snake.head.y === this.apple.y) {
+			// we hit an apple
 			this.snake.extendTail();
 			this.apple = this.setApple();
 		}
-		// if snake eats apple, create new apple
+
 		// if snake hits wall or self, end game
 	}
 
@@ -58,7 +65,6 @@ class Game {
 	}
 
 	_buildGameBoard() {
-
 		const gameRoot = document.createElement('div');
 		gameRoot.classList.add('game__root');
 
@@ -76,7 +82,6 @@ class Game {
 		}
 
 		document.body.appendChild(gameRoot);
-    
 	}
 
 	_getEmptySquare() {
@@ -93,16 +98,12 @@ class Game {
 		}
 
 		return square;
-
 	}
 
 	isSquareOccupied() {
     
 	}
-
-
 }
-
 
 
 const game = new Game();
