@@ -17,7 +17,7 @@ class Game {
 		this._buildGameBoard();
 
 		// initial location
-		this.snake = new Snake(new Square(6, 7), new Square(7, 7), new Square(8, 7));
+		this.snake = new Snake(COLUMNS, ROWS, new Square(6, 7), new Square(7, 7), new Square(8, 7));
 
 		this.apple = this.setApple();
 
@@ -49,19 +49,27 @@ class Game {
 	}
 
 	_progressFrame() {
-		this.snake.move();
-		
+		try {
+			this.snake.move();
+		} catch (e) {
+			alert('game is over!');
+			this._resetGame();
+			return;
+		}
+
 		if (this.snake.head.x === this.apple.x && this.snake.head.y === this.apple.y) {
 			// we hit an apple
 			this.snake.extendTail();
 			this.apple = this.setApple();
 		}
-
-		// if snake hits wall or self, end game
 	}
 
 	_resetGame() {
+		this.snake.reset();
+		
+		this.snake = new Snake(COLUMNS, ROWS, new Square(6, 7), new Square(7, 7), new Square(8, 7));
 
+		this.apple = this.setApple();
 	}
 
 	_buildGameBoard() {
@@ -90,7 +98,7 @@ class Game {
 
 		let square = new Square(x, y);
 
-		while (this.snake.occupiedSpacesSet.has(square)) {
+		while (this.snake.isSpaceOccupied(square)) {
 			x = getRandomInt(1, COLUMNS);
 			y = getRandomInt(1, ROWS);
 
@@ -99,12 +107,7 @@ class Game {
 
 		return square;
 	}
-
-	isSquareOccupied() {
-    
-	}
 }
-
 
 const game = new Game();
 game.createGame();

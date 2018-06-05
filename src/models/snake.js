@@ -3,12 +3,14 @@ import {DIRECTION, KEY_DOWN_MAP} from '../constants/constants';
 
 export class Snake {
 
-	constructor(...initialLocation) {
+	constructor(xBound, yBound, ...initialLocation) {
 		this._occupiedSpaces = initialLocation;  // snake location and movement is modeled after a queue
-		this._occupiedSpacesSet = new Set(initialLocation);  // for quickly finding squares occupied by snake
 		this._currentDirection = DIRECTION.RIGHT;
 		this._lastTail = undefined;  // used to extend snake when apple is eaten
 		this._paintSquares();
+
+		this._xBound = xBound;
+		this._yBound = yBound;
 
 		window.addEventListener('keydown', keypress => {
 			switch (keypress.keyCode) {
@@ -32,8 +34,13 @@ export class Snake {
 		return this._occupiedSpaces.slice(-1)[0];
 	}
 
-	get occupiedSpacesSet() {
-		return this._occupiedSpacesSet;
+	reset() {
+		this._unpaintSquares();
+	}
+
+	isSpaceOccupied(square) {
+		const squareElement = document.querySelector(`div.game__column--${square.x} div.game__square--${square.y}`);
+		return squareElement.classList.contains('occupied');
 	}
 
 	_paintSquares(squares) {
@@ -45,14 +52,29 @@ export class Snake {
 		});
 	}
 
-	_unpaintSquares(square) {
-		const squareElement = document.querySelector(`div.game__column--${square.x} div.game__square--${square.y}`);
-		squareElement.classList.remove('occupied');
+	_unpaintSquares(squares) {
+		const squaresToUnpaint = squares ? squares : this._occupiedSpaces;
+
+		squaresToUnpaint.forEach(square => {
+			const squareElement = document.querySelector(`div.game__column--${square.x} div.game__square--${square.y}`);
+			squareElement.classList.remove('occupied');
+		});
 	}
 
 	extendTail() {  // when an apple is eaten
-		this._occupiedSpacesSet.add(this._lastTail);
 		this._occupiedSpaces.unshift(this._lastTail);
+	}
+
+	_isGameOver(square) {
+		// snake hits self
+		if (this.isSpaceOccupied(square)) {
+			return true;
+		}
+
+		// snake goes out of bound
+		if (square.x < 1 || square.x > this._xBound || square.y < 1 || square.y > this._yBound ) {
+			return true;
+		}
 	}
 
 	move() {
@@ -60,28 +82,27 @@ export class Snake {
 		switch (this._currentDirection) {
 		case DIRECTION.RIGHT:
 			newHead = new Square(this.head.x + 1, this.head.y);
+			if (this._isGameOver(newHead)) throw 'Game Over';
 			this._occupiedSpaces.push(newHead);
-			this._occupiedSpacesSet.add(newHead);
 			break;
 		case DIRECTION.LEFT:
 			newHead = new Square(this.head.x - 1, this.head.y);
+			if (this._isGameOver(newHead)) throw 'Game Over';
 			this._occupiedSpaces.push(newHead);
-			this._occupiedSpacesSet.add(newHead);
 			break;
 		case DIRECTION.UP:
 			newHead = new Square(this.head.x, this.head.y + 1);
+			if (this._isGameOver(newHead)) throw 'Game Over';
 			this._occupiedSpaces.push(newHead);
-			this._occupiedSpacesSet.add(newHead);
 			break;
 		case DIRECTION.DOWN:
 			newHead = new Square(this.head.x, this.head.y - 1);
+			if (this._isGameOver(newHead)) throw 'Game Over';
 			this._occupiedSpaces.push(newHead);
-			this._occupiedSpacesSet.add(newHead);
 			break;
 		}
 		this._lastTail = this._occupiedSpaces.shift();
-		this._occupiedSpacesSet.delete(this._lastTail);
-		this._unpaintSquares(this._lastTail);
+		this._unpaintSquares([this._lastTail]);
 		this._paintSquares([newHead]);
 	}
 }
