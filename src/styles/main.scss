@@ -1,0 +1,34 @@
+$game-square-height: 20px;
+$game-square-width: 20px;
+
+$game-size: 15;
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .game__root {
+    display: grid;
+    grid-template-columns: repeat($game-size, $game-square-height);
+    grid-auto-rows: auto;
+    .game__column {
+      display: grid;
+      grid-template-rows: repeat($game-size, $game-square-width);
+      grid-auto-columns: auto;
+      .game__square {
+        width: $game-square-width;
+        height: $game-square-height;
+        border: 1px solid green;
+
+        &.apple {
+          background: green;
+        }
+
+        &.occupied {
+          background: red;
+        }
+      }
+    }
+  }
+}

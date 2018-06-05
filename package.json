@@ -1,0 +1,29 @@
+{
+  "name": "lao-squarespace-snake",
+  "version": "1.0.0",
+  "description": "Brian Lao Squarespace Snake Homework",
+  "main": "./dist/main.js",
+  "scripts": {
+    "test": "jest",
+    "build:scss": "node-sass ./src/styles/main.scss -o ./dist/css",
+    "build:js": "rollup -c -m",
+    "build": "npm run build:scss & npm run build:js",
+    "watch:scss": "node-sass --watch ./src/styles/main.scss -o ./dist/css",
+    "watch:js": "rollup -c -w -m",
+    "watch": "npm run watch:scss & npm run watch:js"
+  },
+  "keywords": [
+    "lao",
+    "squarespace",
+    "snake"
+  ],
+  "author": "Brian Lao",
+  "license": "MIT",
+  "dependencies": {
+    "node-sass": "^4.9.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "rollup-plugin-eslint": "^4.0.0"
+  }
+}
