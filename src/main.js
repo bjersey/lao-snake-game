@@ -52,7 +52,7 @@ class Game {
 		try {
 			this.snake.move();
 		} catch (e) {
-			alert('game is over!');
+			alert('game is over, you lose!');
 			this._resetGame();
 			return;
 		}
